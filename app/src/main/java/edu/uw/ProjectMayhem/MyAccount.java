@@ -7,6 +7,7 @@
  */
 package edu.uw.ProjectMayhem;
 
+import android.app.DatePickerDialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,8 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,23 +32,29 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Displays the user's account information.
  */
-public class MyAccount extends ActionBarActivity {
+public class MyAccount extends ActionBarActivity implements View.OnClickListener {
+    private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
 
-    /** start date datepicker. */
-    private DatePicker mStartDate;
-
-    /** end date datepicker. */
-    private DatePicker mEndDate;
+    private TextView mStartDateText;
+    private TextView mEndDateText;
+    private Button mStartButton;
+    private Button mEndButton;
+    private DatePickerDialog mStartDateDialog;
+    private DatePickerDialog mEndDateDialog;
+    private Calendar mStartCalendar;
+    private Calendar mEndCalendar;
 
     /**
      * onCreate() generates MyAccount
-     *  {@inheritDoc}
+     * {@inheritDoc}
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +76,14 @@ public class MyAccount extends ActionBarActivity {
         final String uid = prefs.getString("uid", "");
         Log.d("MyAccount", "User id is:" + uid);
 
-        mStartDate = (DatePicker) findViewById(R.id.start_date);
-        mEndDate = (DatePicker) findViewById(R.id.end_date);
+        mStartCalendar = Calendar.getInstance();
+        mEndCalendar = Calendar.getInstance();
+
+        mStartDateText = (TextView) findViewById(R.id.start_date_textview);
+        mEndDateText = (TextView) findViewById(R.id.end_date_textview);
+
+        mStartButton = (Button) findViewById(R.id.start_date_button);
+        mEndButton = (Button) findViewById(R.id.end_date_button);
 
         Button mTrajectoryButton = (Button) findViewById(R.id.trajectory_button);
         mTrajectoryButton.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +124,7 @@ public class MyAccount extends ActionBarActivity {
 
                             JSONObject o = new JSONObject(response);
 
-                            if(o.get("result").equals("success")) {
+                            if (o.get("result").equals("success")) {
 
                                 Log.d("MyAccount", "Data uploaded successfully.");
 
@@ -129,19 +141,42 @@ public class MyAccount extends ActionBarActivity {
                 myData.deleteAllMovement();
             }
         });
+
+        setupDateDialogs();
     }
+
+    private void setupDateDialogs() {
+        final Calendar initial_calendar = Calendar.getInstance();
+        final String start = getString(R.string.start_date);
+        final String end = getString(R.string.end_date);
+
+
+        mStartDateDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                mStartCalendar.set(year, monthOfYear, dayOfMonth);
+                mStartDateText.setText(start + ": " + DATE_FORMATTER.format(mStartCalendar.getTime()));
+            }
+        }, initial_calendar.get(Calendar.YEAR), initial_calendar.get(Calendar.MONTH),
+                initial_calendar.get(Calendar.DAY_OF_MONTH));
+
+        mEndDateDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                mEndCalendar.set(year, monthOfYear, dayOfMonth);
+                mEndDateText.setText(end + ": " + DATE_FORMATTER.format(mEndCalendar.getTime()));
+            }
+        }, initial_calendar.get(Calendar.YEAR), initial_calendar.get(Calendar.MONTH),
+                initial_calendar.get(Calendar.DAY_OF_MONTH));
+    }
+
 
     /**
      * Transitions to the trajectory screen.
      */
     private void myTrajectory(View view) {
-        Intent trajectoryIntent = new Intent(this, MyTrajectory.class);
-        Calendar startCal = Calendar.getInstance();
-        startCal.set(mStartDate.getYear(), mStartDate.getMonth(), mStartDate.getDayOfMonth());
-        Calendar endCal = Calendar.getInstance();
-        endCal.set(mEndDate.getYear(), mEndDate.getMonth(), mEndDate.getDayOfMonth());
-        trajectoryIntent.putExtra("Start Date", startCal.getTime());
-        trajectoryIntent.putExtra("End Date", endCal.getTime());
+        final Intent trajectoryIntent = new Intent(this, MyTrajectory.class);
+        trajectoryIntent.putExtra("Start Date", mStartCalendar.getTime());
+        trajectoryIntent.putExtra("End Date", mEndCalendar.getTime());
+
         startActivity(trajectoryIntent);
     }
 
@@ -173,6 +208,15 @@ public class MyAccount extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v == mStartButton) {
+            mStartDateDialog.show();
+        } else if (v == mEndButton) {
+            mEndDateDialog.show();
+        }
+    }
+
     /**
      * Represents an asynchronous task to sumbit a location update
      */
@@ -197,7 +241,9 @@ public class MyAccount extends ActionBarActivity {
         }
 
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
         protected String doInBackground(Void... params) {
 
@@ -208,13 +254,12 @@ public class MyAccount extends ActionBarActivity {
             URL url = null;
             String response = null;
             String parameters = ("?lat=" + latitude
-                                + "&lon=" + longitude
-                                + "&speed=" + speed
-                                + "&heading=" + heading
-                                + "&source=" + userid
-                                + "&timestamp=" + timestamp);
-            try
-            {
+                    + "&lon=" + longitude
+                    + "&speed=" + speed
+                    + "&heading=" + heading
+                    + "&source=" + userid
+                    + "&timestamp=" + timestamp);
+            try {
                 Log.d("MyAccount", "Sending url: " + webURL + parameters);
                 url = new URL(webURL + parameters);
                 connection = (HttpURLConnection) url.openConnection();
@@ -230,16 +275,16 @@ public class MyAccount extends ActionBarActivity {
                 isr.close();
                 reader.close();
 
-            }
-            catch(IOException e)
-            {
+            } catch (IOException e) {
                 System.err.println("Something bad happened while sending HTTP GET");
             }
 
             return result;
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
         protected void onPostExecute(final String result) {
 
