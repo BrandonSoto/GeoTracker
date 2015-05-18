@@ -20,6 +20,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -199,11 +200,19 @@ public class MyTrajectory extends FragmentActivity {
             }
         }
         LatLng latest = new LatLng(0,0);
-        for (MovementData m : data) {
-            mMap.addMarker(new MarkerOptions().position(new LatLng(m.getLatitude(), m.getLongitude())).title("Position"));
+
+        final PolylineOptions polylineOptions = new PolylineOptions();
+        polylineOptions.width(5);
+
+        for (final MovementData m : data) {
             latest = new LatLng(m.getLatitude(), m.getLongitude());
+            polylineOptions.add(latest);
+
+            mMap.addMarker(new MarkerOptions().position(latest).title("Position"));
+
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latest, 5));
+        mMap.addPolyline(polylineOptions);
     }
 
     /**
