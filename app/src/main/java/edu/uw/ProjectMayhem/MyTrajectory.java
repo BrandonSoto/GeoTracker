@@ -72,33 +72,6 @@ public class MyTrajectory extends FragmentActivity {
         mEndDate = (Date) extras.get("End Date");
 
         myData = new MovementDBHandler(this);
-        List<MovementData> moves = myData.getAllMovement();
-
-        for (MovementData m : moves) {
-
-            StringBuilder sb = new StringBuilder();
-
-            sb.append(m.getLatitude());
-            sb.append("----");
-            sb.append(m.getLongitude());
-            sb.append("----");
-            sb.append(m.getSpeed());
-            sb.append("----");
-            sb.append(m.getHeading());
-            sb.append("----");
-//            sb.append(m.getSourceID());
-            sb.append("----");
-            sb.append(m.getTimeStamp());
-
-            Log.d("+++++++++++++++", "TEST DATA TEST************");
-            Log.d("Data: ", sb.toString());
-
-            String c = myData.getMovementCount()+"";
-
-            Log.d("+++++++++++++++","COUNT************");
-            Log.d("Count: ", c);
-        }
-
 
         setUpMapIfNeeded();
     }
