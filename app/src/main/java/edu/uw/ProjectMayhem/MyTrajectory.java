@@ -32,7 +32,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -152,9 +154,24 @@ public class MyTrajectory extends FragmentActivity {
 
         Log.d("MyTrajectory", "User id is:" + uid);
 
+        GregorianCalendar startCal = new GregorianCalendar();
+        GregorianCalendar endCal = new GregorianCalendar();
+
+        startCal.setTime(mStartDate);
+        startCal.set(Calendar.HOUR_OF_DAY, 0);
+        startCal.set(Calendar.MINUTE, 0);
+        startCal.set(Calendar.SECOND, 0);
+        startCal.set(Calendar.MILLISECOND, 0);
+
+        endCal.setTime(mEndDate);
+        endCal.set(Calendar.HOUR_OF_DAY, 23);
+        endCal.set(Calendar.MINUTE, 59);
+        endCal.set(Calendar.SECOND, 59);
+        endCal.set(Calendar.MILLISECOND, 999);
+
         DataDownloadTask task = new DataDownloadTask(uid,
-                (mStartDate.getTime() / 1000),
-                (mEndDate.getTime() / 1000));
+                (startCal.getTimeInMillis() / 1000),
+                (endCal.getTimeInMillis() / 1000));
         task.execute();
         String response = "";
 

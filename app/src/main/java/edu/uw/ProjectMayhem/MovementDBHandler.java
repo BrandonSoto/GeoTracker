@@ -92,6 +92,8 @@ public class MovementDBHandler extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
+        cursor.close();
+
         return movementList;
     }
 
@@ -103,7 +105,10 @@ public class MovementDBHandler extends SQLiteOpenHelper {
 
         Cursor cursor = db.rawQuery(countQuery, null);
 
-        return cursor.getCount();
+        int count = cursor.getCount();
+        cursor.close();
+
+        return count;
     }
 
 //    public int updateMovement(MovementData update) {

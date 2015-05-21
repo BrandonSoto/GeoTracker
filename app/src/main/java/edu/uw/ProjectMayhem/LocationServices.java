@@ -340,7 +340,7 @@ public class LocationServices extends Service implements GoogleApiClient.Connect
                         mCurrentLocation.getSpeed(),
                         mCurrentLocation.getBearing(),
                         uid,
-                        System.currentTimeMillis()));
+                        (System.currentTimeMillis() / 1000)));
             }
 
         }

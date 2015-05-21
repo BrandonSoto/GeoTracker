@@ -47,13 +47,13 @@
         <activity
             android:name=".RegistrationActivity"
             android:label="@string/title_activity_registration"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden"/>
 
         <activity
             android:name=".MyAccount"
             android:label="@string/title_activity_my_account"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden"/>
 
         <activity
             android:name=".ResetActivity"
@@ -65,12 +65,12 @@
         <activity
             android:name=".MyTrajectory"
             android:label="@string/title_activity_my_trajectory"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
 
         <receiver android:name=".LocationBroadcastReceiver"
             android:enabled="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
 
