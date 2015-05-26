@@ -3,6 +3,8 @@ package edu.uw.ProjectMayhem;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 /*
@@ -22,8 +24,14 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
 
             Log.d("BroadcastReceiver", "Boot completed!");
 
-            Intent location = new Intent(context, LocationServices.class);
-            context.startService(location);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            final Boolean isTracking = prefs.getBoolean("tracking", false);
+
+            // Only start tracking if there is a user associated
+            if (isTracking) {
+                Intent location = new Intent(context, LocationServices.class);
+                context.startService(location);
+            }
 
         }
     }

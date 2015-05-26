@@ -73,6 +73,9 @@ public class LocationServices extends Service implements GoogleApiClient.Connect
     /** uid string. */
     private String uid;
 
+    /** The timer to update the location. */
+    private Timer locationTimer;
+
     /**
      * Tracks the status of the location updates request. Value changes when the user presses the
      * Start Updates and Stop Updates buttons.
@@ -139,9 +142,16 @@ public class LocationServices extends Service implements GoogleApiClient.Connect
             buildGoogleApiClient();
         }
         // Start the location update timer
-        Timer locationTimer = new Timer();
+        locationTimer = new Timer();
         locationTimer.scheduleAtFixedRate(new LocationUpdate(), 0, POLL_INTERVAL);
 
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void onDestroy() {
+        locationTimer.cancel();
+        onStop();
     }
 
     /** retrieves the context. */

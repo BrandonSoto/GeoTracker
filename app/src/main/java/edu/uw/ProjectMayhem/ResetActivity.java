@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,15 +56,38 @@ public class ResetActivity extends ActionBarActivity {
 
         mEmail = (EditText) findViewById(R.id.email);
         mResetButton = (Button) findViewById(R.id.reset_password);
-
-        Intent loginIntent = getIntent();
-
         mResetButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 reset(v);
             }
         });
 
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_default, menu);
+        return true;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_back) {
+            // Same effect as pressing the back button (useful for phones that don't have one)
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -97,6 +122,7 @@ public class ResetActivity extends ActionBarActivity {
                 if(o.get("result").equals("success")) {
                     startActivity(loginIntent);
                     Toast.makeText(this, o.get("message").toString(), Toast.LENGTH_LONG).show();
+                    finish();
                 } else {
                     Toast.makeText(this, o.get("error").toString(), Toast.LENGTH_LONG).show();
                     System.out.println("Error: " + o.get("error"));
@@ -118,11 +144,6 @@ public class ResetActivity extends ActionBarActivity {
 
         /** reset url. */
         private final String webURL = "http://450.atwebpages.com/reset.php";
-
-        /** {@inheritDoc} */
-        @Override
-        protected void onPreExecute() {
-        }
 
         /** {@inheritDoc} */
         @Override
@@ -157,13 +178,5 @@ public class ResetActivity extends ActionBarActivity {
 
             return result;
         }
-
-        /** {@inheritDoc} */
-        @Override
-        protected void onPostExecute(String result) {
-
-        }
     }
-
-
 }

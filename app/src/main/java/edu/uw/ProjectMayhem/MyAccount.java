@@ -18,6 +18,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -52,6 +53,8 @@ public class MyAccount extends ActionBarActivity implements View.OnClickListener
     private Calendar mStartCalendar;
     private Calendar mEndCalendar;
 
+    private Intent locationServiceIntent;
+
     /**
      * onCreate() generates MyAccount
      * {@inheritDoc}
@@ -62,8 +65,8 @@ public class MyAccount extends ActionBarActivity implements View.OnClickListener
         setContentView(R.layout.activity_my_account);
 
         // Start the service
-        Intent i = new Intent(this, LocationServices.class);
-        startService(i);
+        locationServiceIntent = new Intent(this, LocationServices.class);
+        startService(locationServiceIntent);
 
         ComponentName receiver = new ComponentName(this, LocationBroadcastReceiver.class);
         PackageManager pm = this.getPackageManager();
@@ -185,9 +188,10 @@ public class MyAccount extends ActionBarActivity implements View.OnClickListener
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_my_account, menu);
-        return true;
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_my_account, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     /**
@@ -195,17 +199,48 @@ public class MyAccount extends ActionBarActivity implements View.OnClickListener
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                showSettings();
+                return true;
+            case R.id.action_logout:
+                logout();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    /** Displays the settings activity. */
+    private void showSettings() {
+        Intent settingsIntent = new Intent(this, SettingsActivity.class);
+        startActivity(settingsIntent);
+    }
+
+    /** Logs out the user and stops tracking. */
+    private void logout() {
+
+        // Stop tracking
+        stopService(locationServiceIntent);
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor spe = prefs.edit();
+        spe.putBoolean("tracking", false);
+        spe.apply();
+
+        // Go to the login page
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        startActivity(loginIntent);
+        finish();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void onBackPressed() {
+        // Go to the login page
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        startActivity(loginIntent);
+        finish();
     }
 
     @Override
@@ -251,8 +286,7 @@ public class MyAccount extends ActionBarActivity implements View.OnClickListener
 
             HttpURLConnection connection;
 
-            URL url = null;
-            String response = null;
+            URL url;
             String parameters = ("?lat=" + latitude
                     + "&lon=" + longitude
                     + "&speed=" + speed
@@ -280,14 +314,6 @@ public class MyAccount extends ActionBarActivity implements View.OnClickListener
             }
 
             return result;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void onPostExecute(final String result) {
-
         }
     }
 }

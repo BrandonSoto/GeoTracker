@@ -50,13 +50,6 @@ import java.util.List;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<Cursor> {
-
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -71,26 +64,13 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
     /** Shows progress for signing in. */
     private View mProgressView;
 
-    /** Initiates signing a user in. */
-    private Button mLoginButton;
-
-    /** Switches to the registration screen. */
-    private Button mRegisterButton;
-
-    /** Switches to the "forgot password" screen. */
-    private Button mForgotButton;
-
     /** log in form view. */
     private View mLoginFormView;
-
-    /** instance state bundle. */
-    private Bundle instanceState;
 
     /** onCreate() initiates the actions of LoginActivity. */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        instanceState = savedInstanceState;
         setContentView(R.layout.activity_login);
 
         // Set up the login form.
@@ -100,7 +80,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         mPassword = (EditText) findViewById(R.id.password);
         mEmail = (AutoCompleteTextView) findViewById(R.id.email);
 
-        mLoginButton = (Button) findViewById(R.id.email_sign_in_button);
+        Button mLoginButton = (Button) findViewById(R.id.email_sign_in_button);
         mLoginButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,7 +88,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
             }
         });
 
-        mRegisterButton = (Button) findViewById(R.id.register_button);
+        Button mRegisterButton = (Button) findViewById(R.id.register_button);
         mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,14 +96,13 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
             }
         });
 
-        mForgotButton = (Button) findViewById(R.id.forgot_button);
+        Button mForgotButton = (Button) findViewById(R.id.forgot_button);
         mForgotButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 reset(view);
             }
         });
-
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
@@ -227,7 +206,8 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
                         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
                         SharedPreferences.Editor spe = prefs.edit();
                         spe.putString("uid", o.get("userid").toString());
-                        spe.commit();
+                        spe.putBoolean("tracking", true);
+                        spe.apply();
                         doLogin();
                     } else {
                         showProgress(false);
@@ -246,24 +226,21 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
     /** generates the login features. */
     private void doLogin() {
         // If login is successful, switch to MyAccount
-        showProgress(false);
-
         Toast.makeText(this, mEmail.getText().toString()
                 + " has signed in!", Toast.LENGTH_SHORT).show();
 
         Intent accountIntent = new Intent(this, MyAccount.class);
         startActivity(accountIntent);
+        finish();
     }
 
     /** {@inheritDoc} */
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
         return (email.contains("@") && email.contains("."));
     }
 
     /** {@inheritDoc} */
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 5;
     }
 
@@ -415,7 +392,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         /** {@inheritDoc} */
         @Override
         protected void onPostExecute(final String result) {
-
+            showProgress(false);
         }
 
         /** {@inheritDoc} */

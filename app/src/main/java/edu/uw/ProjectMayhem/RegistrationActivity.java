@@ -6,6 +6,7 @@ package edu.uw.ProjectMayhem;
 /**
  * Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto.
  */
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,7 +16,6 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
-import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -227,22 +227,19 @@ public class RegistrationActivity extends ActionBarActivity {
 
     /** {@inheritDoc} */
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 5;
     }
 
     /** {@inheritDoc} */
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
         return email.contains("@");
     }
 
     private boolean isAnswerValid(String answer) {
-        //TODO: Replace this with your own logic
         return answer.length() > 0;
     }
 
-        /** {@inheritDoc} */
+    /** {@inheritDoc} */
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
@@ -260,7 +257,7 @@ public class RegistrationActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_registration, menu);
+        getMenuInflater().inflate(R.menu.menu_default, menu);
         return true;
     }
 
@@ -273,7 +270,9 @@ public class RegistrationActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_back) {
+            // Same effect as pressing the back button (useful for phones that don't have one)
+            onBackPressed();
             return true;
         }
 
@@ -349,11 +348,6 @@ public class RegistrationActivity extends ActionBarActivity {
 
             return result;
         }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-        }
     }
 
     /**
@@ -379,8 +373,7 @@ public class RegistrationActivity extends ActionBarActivity {
             HttpURLConnection connection;
 
             URL url = null;
-            try
-            {
+            try {
                 url = new URL(webURL);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setDoOutput(true);
@@ -395,19 +388,11 @@ public class RegistrationActivity extends ActionBarActivity {
                 isr.close();
                 reader.close();
 
-            }
-            catch(IOException e)
-            {
+            } catch (IOException e) {
                 System.err.println("Something bad happened in sending HTTP GET request");
             }
 
             return result;
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        protected void onPostExecute(String result) {
-
         }
     }
 }
