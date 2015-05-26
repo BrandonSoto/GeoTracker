@@ -234,15 +234,6 @@ public class MyAccount extends ActionBarActivity implements View.OnClickListener
         finish();
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public void onBackPressed() {
-        // Go to the login page
-        Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivity(loginIntent);
-        finish();
-    }
-
     @Override
     public void onClick(View v) {
         if (v == mStartButton) {
