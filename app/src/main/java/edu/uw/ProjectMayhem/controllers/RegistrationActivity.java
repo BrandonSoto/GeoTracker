@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -72,8 +73,6 @@ public class RegistrationActivity extends ActionBarActivity {
         mConfirmPasswordText = (EditText) findViewById(R.id.password_confirm);
         mAnswerText = (EditText) findViewById(R.id.answer_field);
 
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
         final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.security_questions, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
 
@@ -120,39 +119,29 @@ public class RegistrationActivity extends ActionBarActivity {
                     AgreementWebTask agreeTask = new AgreementWebTask();
                     agreeTask.execute();
 
-//                    String agreementString = "";
                     String result = "";
+                    StringBuffer newResult = new StringBuffer();
 
                     try {
                         result = agreeTask.get();
                     } catch (Exception e) {
-                        System.out.println("Something bad happened");
+                        System.out.println("Failed to get result from user agreement web task");
                     }
 
                     System.out.println("Response: " + result);
 
-//                    if (result != null) {
-//                        try {
-//
-//                            JSONObject o = new JSONObject(Html.fromHtml(result).toString());
-//
-//                            System.out.println("Response: " + o.get("result"));
-//
-//                            if (o.get("result").equals("success")) {
-//                                agreementString = o.get("agreement").toString();
-//                                agreementString = agreementString.replaceAll("\\n", "\\\\n");
-//                            }
-//
-//                        } catch (JSONException e) {
-//                            System.out.println("JSON Exception " + e);
-//                        }
-//
-//                    }
+                    if (result != null) {
+
+                        newResult = new StringBuffer(result);
+                        result = newResult.substring(15, newResult.length() - 3);
+                        System.out.println(result);
+
+                    }
 
                     AlertDialog.Builder agreement = new AlertDialog.Builder(RegistrationActivity.this);
                     agreement
                             .setTitle("User Agreement")
-                            .setMessage(R.string.agreement_string)
+                            .setMessage(Html.fromHtml(result))
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .setPositiveButton("I Agree", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface agreement, int which) {
@@ -320,8 +309,8 @@ public class RegistrationActivity extends ActionBarActivity {
             String result = "";
 
             HttpURLConnection connection;
+            URL url;
 
-            URL url = null;
             String parameters = ("?email=" + mEmailText.getText().toString()
                                 + "&password=" + mPasswordText.getText().toString())
                                 + "&question=" + encodedQuestion
@@ -373,8 +362,8 @@ public class RegistrationActivity extends ActionBarActivity {
             String result = "";
 
             HttpURLConnection connection;
+            URL url;
 
-            URL url = null;
             try {
                 url = new URL(webURL);
                 connection = (HttpURLConnection) url.openConnection();
@@ -385,7 +374,12 @@ public class RegistrationActivity extends ActionBarActivity {
                 InputStreamReader isr = new InputStreamReader(connection.getInputStream());
                 BufferedReader reader = new BufferedReader(isr);
 
-                result = reader.readLine();
+                String line = "";
+
+                while((line = reader.readLine()) != null) {
+                    result += line;
+                }
+
 
                 isr.close();
                 reader.close();
