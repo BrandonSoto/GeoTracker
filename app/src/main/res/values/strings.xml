@@ -84,7 +84,7 @@ You will not be notified what information we will gather, NSA style up in this a
 \nWe will not make readily available to customers information about our policies and practices relating to the management of personal information. Our privacy is more important than yours.
 \nWe are committed to conducting our business in accordance with these principles in order to ensure that your personal privacy is thoroughly violated whenever this application is used.</string>
 
-    <!-- MyAccount -->
+    <!-- MyAccountActivity -->
     <string name="title_activity_my_account">My Account</string>
     <string name="start_hint">Start date</string>
     <string name="end_hint">End date</string>

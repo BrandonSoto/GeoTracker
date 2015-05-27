@@ -5,7 +5,7 @@
 /**
  * Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto.
  */
-package edu.uw.ProjectMayhem.controllers;
+package edu.uw.ProjectMayhem.model;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import edu.uw.ProjectMayhem.controllers.LoginActivity;
 import edu.uw.ProjectMayhem.data.MovementDBHandler;
 import edu.uw.ProjectMayhem.data.MovementData;
 
@@ -111,7 +112,7 @@ public class LocationServices extends Service implements GoogleApiClient.Connect
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         uid = prefs.getString("uid", "");
-        Log.d("MyAccount", "User id is:" + uid);
+        Log.d("MyAccountActivity", "User id is:" + uid);
 
         // Display a notification to the user
         NotificationCompat.Builder mBuilder =

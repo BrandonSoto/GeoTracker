@@ -36,6 +36,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import edu.uw.ProjectMayhem.R;
 import edu.uw.ProjectMayhem.model.User;
 
 /** RegistrationActivity generates the registration features of app. */

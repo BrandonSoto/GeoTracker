@@ -27,6 +27,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import edu.uw.ProjectMayhem.R;
+
 
 /**
  * A screen that allows teh user to reset his/her password.

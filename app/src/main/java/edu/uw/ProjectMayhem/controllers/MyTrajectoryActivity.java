@@ -37,13 +37,14 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import edu.uw.ProjectMayhem.R;
 import edu.uw.ProjectMayhem.data.MovementDBHandler;
 import edu.uw.ProjectMayhem.data.MovementData;
 
 /**
  * Displays the user's trajectory information.
  */
-public class MyTrajectory extends FragmentActivity {
+public class MyTrajectoryActivity extends FragmentActivity {
 
     /**
      * map used for placeholder at the moment for my trajectory activity.
@@ -60,7 +61,7 @@ public class MyTrajectory extends FragmentActivity {
     private Date mEndDate;
 
     /**
-     * onCreate method creates the MyTrajectory activity.
+     * onCreate method creates the MyTrajectoryActivity activity.
      *
      * @param savedInstanceState
      */
@@ -111,7 +112,7 @@ public class MyTrajectory extends FragmentActivity {
                     .getMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
-                Log.d("MyTrajectory", "Setting up the map...");
+                Log.d("MyTrajectoryActivity", "Setting up the map...");
                 setUpMap();
             }
         }
@@ -128,7 +129,7 @@ public class MyTrajectory extends FragmentActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         final String uid = prefs.getString("uid", "");
 
-        Log.d("MyTrajectory", "User id is:" + uid);
+        Log.d("MyTrajectoryActivity", "User id is:" + uid);
 
         GregorianCalendar startCal = new GregorianCalendar();
         GregorianCalendar endCal = new GregorianCalendar();
@@ -169,7 +170,7 @@ public class MyTrajectory extends FragmentActivity {
                     // Now parse the JSON array
                     JSONArray myArr = o.getJSONArray("points");
 
-                    Log.d("MyTrajectory", "Size of data array is: " + myArr.length());
+                    Log.d("MyTrajectoryActivity", "Size of data array is: " + myArr.length());
 
                     for (int i = 0; i < myArr.length(); i++) {
                         JSONObject obj = myArr.getJSONObject(i);
@@ -185,7 +186,7 @@ public class MyTrajectory extends FragmentActivity {
                 } else {
 
                     Toast.makeText(this, o.get("error").toString(), Toast.LENGTH_LONG).show();
-                    Log.d("MyTrajectory", "Error fetching locations");
+                    Log.d("MyTrajectoryActivity", "Error fetching locations");
 
                 }
             } catch (JSONException e) {
@@ -241,7 +242,7 @@ public class MyTrajectory extends FragmentActivity {
                                 + "&end=" + endDate);
             try
             {
-                Log.d("MyTrajectory", "Sending url: " + webURL + parameters);
+                Log.d("MyTrajectoryActivity", "Sending url: " + webURL + parameters);
                 url = new URL(webURL + parameters);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setDoOutput(true);

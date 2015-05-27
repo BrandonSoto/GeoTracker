@@ -26,7 +26,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <service
-            android:name=".controllers.LocationServices"
+            android:name=".model.LocationServices"
             android:exported="false" />
 
         <activity
@@ -45,7 +45,7 @@
             android:windowSoftInputMode="stateHidden" />
 
         <activity
-            android:name=".model.MyAccount"
+            android:name=".controllers.MyAccountActivity"
             android:label="@string/title_activity_my_account"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
@@ -60,7 +60,7 @@
             android:label="@string/title_activity_settings" />
 
         <activity
-            android:name=".controllers.MyTrajectory"
+            android:name=".controllers.MyTrajectoryActivity"
             android:label="@string/title_activity_my_trajectory" />
 
         <receiver

@@ -44,7 +44,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.uw.ProjectMayhem.model.MyAccount;
+import edu.uw.ProjectMayhem.R;
+import edu.uw.ProjectMayhem.model.LocationServices;
 
 /**
  *
@@ -227,11 +228,11 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
     /** generates the login features. */
     private void doLogin() {
-        // If login is successful, switch to MyAccount
+        // If login is successful, switch to MyAccountActivity
         Toast.makeText(this, mEmail.getText().toString()
                 + " has signed in!", Toast.LENGTH_SHORT).show();
 
-        Intent accountIntent = new Intent(this, MyAccount.class);
+        Intent accountIntent = new Intent(this, MyAccountActivity.class);
         startActivity(accountIntent);
         finish();
     }
