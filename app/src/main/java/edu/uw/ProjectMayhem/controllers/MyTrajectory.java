@@ -5,7 +5,7 @@
 /**
  * Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto
  */
-package edu.uw.ProjectMayhem;
+package edu.uw.ProjectMayhem.controllers;
 
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -36,6 +36,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import edu.uw.ProjectMayhem.data.MovementDBHandler;
+import edu.uw.ProjectMayhem.data.MovementData;
 
 /**
  * Displays the user's trajectory information.

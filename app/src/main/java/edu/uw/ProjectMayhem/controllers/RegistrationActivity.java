@@ -1,4 +1,4 @@
-package edu.uw.ProjectMayhem;
+package edu.uw.ProjectMayhem.controllers;
 /*
  * Copyright (c) 2015. Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto.
  */
@@ -34,6 +34,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import edu.uw.ProjectMayhem.model.User;
 
 /** RegistrationActivity generates the registration features of app. */
 public class RegistrationActivity extends ActionBarActivity {

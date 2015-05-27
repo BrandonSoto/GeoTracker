@@ -5,7 +5,7 @@
 /**
  * Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto.
  */
-package edu.uw.ProjectMayhem;
+package edu.uw.ProjectMayhem.controllers;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -30,6 +30,9 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import edu.uw.ProjectMayhem.data.MovementDBHandler;
+import edu.uw.ProjectMayhem.data.MovementData;
 
 /**
  * Creates location information for app.

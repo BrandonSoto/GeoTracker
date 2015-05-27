@@ -1,4 +1,4 @@
-package edu.uw.ProjectMayhem;
+package edu.uw.ProjectMayhem.controllers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

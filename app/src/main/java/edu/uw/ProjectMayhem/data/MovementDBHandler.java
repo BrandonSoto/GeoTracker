@@ -1,4 +1,4 @@
-package edu.uw.ProjectMayhem;
+package edu.uw.ProjectMayhem.data;
 
 import android.content.ContentValues;
 import android.content.Context;

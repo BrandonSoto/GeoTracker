@@ -5,7 +5,7 @@
 /**
  * Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto.
  */
-package edu.uw.ProjectMayhem;
+package edu.uw.ProjectMayhem.controllers;
 
 import android.content.Intent;
 import android.os.AsyncTask;

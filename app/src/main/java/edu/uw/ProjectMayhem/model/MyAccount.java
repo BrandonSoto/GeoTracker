@@ -5,7 +5,7 @@
 /**
  * Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto
  */
-package edu.uw.ProjectMayhem;
+package edu.uw.ProjectMayhem.model;
 
 import android.app.DatePickerDialog;
 import android.content.ComponentName;
@@ -37,6 +37,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import edu.uw.ProjectMayhem.data.MovementDBHandler;
+import edu.uw.ProjectMayhem.data.MovementData;
+import edu.uw.ProjectMayhem.controllers.LocationBroadcastReceiver;
+import edu.uw.ProjectMayhem.controllers.LocationServices;
+import edu.uw.ProjectMayhem.controllers.LoginActivity;
+import edu.uw.ProjectMayhem.controllers.MyTrajectory;
+import edu.uw.ProjectMayhem.controllers.SettingsActivity;
 
 /**
  * Displays the user's account information.

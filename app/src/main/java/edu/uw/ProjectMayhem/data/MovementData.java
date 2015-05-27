@@ -1,4 +1,4 @@
-package edu.uw.ProjectMayhem;
+package edu.uw.ProjectMayhem.data;
 /*
  * Copyright (c) 2015. Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto.
  */

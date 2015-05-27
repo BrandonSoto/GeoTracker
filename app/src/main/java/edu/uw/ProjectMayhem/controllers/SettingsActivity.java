@@ -1,4 +1,4 @@
-package edu.uw.ProjectMayhem;
+package edu.uw.ProjectMayhem.controllers;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
