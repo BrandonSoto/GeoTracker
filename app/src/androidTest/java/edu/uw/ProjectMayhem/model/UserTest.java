@@ -9,6 +9,8 @@ package edu.uw.ProjectMayhem.model;
 
 import junit.framework.TestCase;
 
+import edu.uw.ProjectMayhem.model.User;
+
 public class UserTest extends TestCase{
     private User mUser;
 

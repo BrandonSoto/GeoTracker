@@ -5,7 +5,7 @@
 /**
  * Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto
  */
-package edu.uw.ProjectMayhem.model;
+package edu.uw.ProjectMayhem;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
