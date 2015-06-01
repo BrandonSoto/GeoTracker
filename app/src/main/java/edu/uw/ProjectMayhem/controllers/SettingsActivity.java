@@ -7,56 +7,64 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import edu.uw.ProjectMayhem.R;
 import edu.uw.ProjectMayhem.model.LocationServices;
+import edu.uw.ProjectMayhem.model.UploadService;
 
 
 public class SettingsActivity extends ActionBarActivity {
 
     private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
+    private Intent locationServiceIntent;
+    private boolean trackingState;
 
-    private SeekBar mLocationIntervalSeek;
+    // Default intervals in seconds
+    private static final int DEFAULT_AC_INTERVAL = 60;
+    private static final int DEFAULT_BATTERY_INTERVAL = 300;
+    private static final int DEFAULT_BATTERY_LOW_INTERVAL = 600;
+    private static final int DEFAULT_UPLOAD_INTERVAL = 3600;
+
+    // Shared preferences names for each slider
+    private static final String LOCATION_SLIDER = "location_slider";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = prefs.edit();
 
-        final Intent locationServiceIntent = new Intent (this, LocationServices.class);
-        final boolean trackingState = prefs.getBoolean("tracking", false);
-        mLocationIntervalSeek = (SeekBar) findViewById(R.id.locationSeekBar);
-        mLocationIntervalSeek.setMax(5);
-        mLocationIntervalSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        locationServiceIntent = new Intent (this, LocationServices.class);
+        trackingState = prefs.getBoolean("tracking", true);
 
-            int prog;
+        setupTrackingSwitch();
 
-            /** {@inheritDoc} */
+        final TextView mIntervalUnderText = (TextView) findViewById(R.id.interval_under_text);
+        SeekBar mIntervalSeekBar = (SeekBar) findViewById(R.id.location_seek_bar);
+        setupSlider(10, 60, mIntervalUnderText, mIntervalSeekBar, DEFAULT_AC_INTERVAL, LOCATION_SLIDER);
+
+        Button mDumpDataButton = (Button) findViewById(R.id.dump_data);
+        mDumpDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-                prog = progress;
-
-            }
-
-            /** {@inheritDoc} */
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            /** {@inheritDoc} */
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(SettingsActivity.this, ("Interval set to " + ((prog + 1) * 30) + " seconds."), Toast.LENGTH_SHORT).show();
+            public void onClick(View view) {
+                UploadService.manualUpload(SettingsActivity.this);
             }
         });
+    }
 
+    /** Handles setup of the tracking enable/disable switch. */
+    private void setupTrackingSwitch() {
         final Switch mTrackingSwitch = (Switch) findViewById(R.id.tracking_switch);
         mTrackingSwitch.setChecked(trackingState);
         if (trackingState) {
@@ -71,17 +79,111 @@ public class SettingsActivity extends ActionBarActivity {
                                          boolean isChecked) {
 
                 if (isChecked) {
-                    SharedPreferences.Editor editor = prefs.edit();
                     editor.putBoolean("tracking", true);
                     editor.apply();
                     startService(locationServiceIntent);
                     mTrackingSwitch.setText(R.string.tracking_on);
                 } else {
-                    SharedPreferences.Editor editor = prefs.edit();
                     editor.putBoolean("tracking", false);
                     editor.apply();
                     stopService(locationServiceIntent);
                     mTrackingSwitch.setText(R.string.tracking_off);
+                }
+            }
+        });
+    }
+
+    private void setupSlider(final int lessOffset, final int greaterOffset,
+                             final TextView underText, SeekBar slider,
+                             final int defaultInterval, final String prefsName) {
+
+        slider.setProgress(prefs.getInt((prefsName + "_progress"), 4));
+        int storedInterval = prefs.getInt((prefsName + "_interval"), defaultInterval);
+
+        if (storedInterval < 60) {
+            underText.setText("Interval: " + storedInterval + " seconds");
+        } else if (storedInterval == 60) {
+            underText.setText("Interval: 1 minute");
+        } else if (storedInterval == 3600) {
+            underText.setText("Interval: 1 hour");
+        } else if (storedInterval > 3600) {
+            underText.setText("Interval: " + (storedInterval / 3600) + " hours");
+        } else {
+            if ((storedInterval / 60) % 10 == 0) {
+                underText.setText("Interval: " + (storedInterval / 60) + " minutes");
+            } else {
+                underText.setText("Interval: " + (storedInterval / 60) + " minutes");
+            }
+        }
+
+        slider.setMax(8);
+        slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            int interval;
+            int prog;
+
+            /** {@inheritDoc} */
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                prog = progress;
+                if (progress < 4) {
+                    interval = defaultInterval - ((4 - progress) * lessOffset);
+                } else if (progress == 4) {
+                    interval = defaultInterval;
+                } else { // progress > 4
+                    interval = defaultInterval + ((progress - 4) * greaterOffset);
+                }
+
+                if (interval < 60) {
+                    underText.setText("Interval: " + interval + " seconds");
+                } else if (interval == 60) {
+                    underText.setText("Interval: 1 minute");
+                } else if (interval == 3600) {
+                    underText.setText("Interval: 1 hour");
+                } else if (interval > 3600) {
+                    underText.setText("Interval: " + (interval / 3600) + " hours");
+                } else {
+                    if ((interval / 60) % 10 == 0) {
+                        underText.setText("Interval: " + (interval / 60) + " minutes");
+                    } else {
+                        underText.setText("Interval: " + (interval / 60) + " minutes");
+                    }
+                }
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+                editor.putInt((prefsName + "_interval"), interval);
+                editor.putInt((prefsName + "_progress"), prog);
+                editor.apply();
+
+                if (interval < 60) {
+                    Toast.makeText(SettingsActivity.this, ("Interval set to " + interval + " seconds."), Toast.LENGTH_SHORT).show();
+                } else if (interval == 60) {
+                    Toast.makeText(SettingsActivity.this, "Interval set to 1 minute.", Toast.LENGTH_SHORT).show();
+                } else if (interval == 3600) {
+                    Toast.makeText(SettingsActivity.this, "Interval set to 1 hour.", Toast.LENGTH_SHORT).show();
+                } else if (interval > 3600) {
+                    Toast.makeText(SettingsActivity.this,
+                            ("Interval set to " + (interval / 3600) + " hours."),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    if (((interval / 60) % 10) == 0) {
+                        Toast.makeText(SettingsActivity.this,
+                                ("Interval set to " + (interval / 60) + " minutes."),
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(SettingsActivity.this,
+                                ("Interval set to " + (interval / 60) + " minutes."),
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

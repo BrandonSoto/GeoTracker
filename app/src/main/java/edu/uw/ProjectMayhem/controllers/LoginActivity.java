@@ -209,7 +209,6 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
                         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
                         SharedPreferences.Editor spe = prefs.edit();
                         spe.putString("uid", o.get("userid").toString());
-                        spe.putBoolean("tracking", true);
                         spe.apply();
                         doLogin();
                     } else {

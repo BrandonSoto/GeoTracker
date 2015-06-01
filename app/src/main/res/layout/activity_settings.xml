@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tracking_switch"
-            android:textColor="#ff000000" />
+            android:textColor="#FF000000" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -32,13 +32,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/frequency_label"
-            android:id="@+id/textView"
+            android:text="@string/location_interval"
+            android:id="@+id/location_interval_text"
             android:textColor="#FF000000" />
 
         <SeekBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/locationSeekBar" />
+            android:id="@+id/location_seek_bar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text=""
+            android:id="@+id/interval_under_text" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dump_data"
+            android:id="@+id/dump_data" />
     </LinearLayout>
 </ScrollView>

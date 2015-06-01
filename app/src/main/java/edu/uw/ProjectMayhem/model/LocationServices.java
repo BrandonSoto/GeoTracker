@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -52,6 +53,8 @@ public class LocationServices extends Service implements GoogleApiClient.Connect
 
     // Gathers the location on the set interval
     private static final int POLL_INTERVAL = 60000; //60 seconds
+
+    private SharedPreferences prefs;
 
     /**
      * The fastest rate for active location updates. Exact. Updates will never be more frequent
@@ -94,6 +97,17 @@ public class LocationServices extends Service implements GoogleApiClient.Connect
      */
     protected String mLastUpdateTime;
 
+    /**
+     * Class for clients to access.  Because we know this service always
+     * runs in the same process as its clients, we don't need to deal with
+     * IPC.
+     */
+    public class LocalBinder extends Binder {
+        LocationServices getService() {
+            return LocationServices.this;
+        }
+    }
+
     /** onCreate() initializes LocationServices. */
     @Override
     public void onCreate() {
@@ -110,7 +124,7 @@ public class LocationServices extends Service implements GoogleApiClient.Connect
 
         Log.d(TAG, "Location Service starting up!");
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         uid = prefs.getString("uid", "");
         Log.d("MyAccountActivity", "User id is:" + uid);
 
@@ -147,8 +161,8 @@ public class LocationServices extends Service implements GoogleApiClient.Connect
         }
         // Start the location update timer
         locationTimer = new Timer();
-        locationTimer.scheduleAtFixedRate(new LocationUpdate(), 0, POLL_INTERVAL);
-
+        locationTimer.scheduleAtFixedRate(new LocationUpdate(), 0, (prefs.getInt("location_slider_interval", 60) * 1000));
+        Log.d("LocationInterval", ("Location timer started with interval: " + prefs.getInt("location_slider_interval", 60) + " seconds"));
     }
 
     /** {@inheritDoc} */
@@ -157,6 +171,15 @@ public class LocationServices extends Service implements GoogleApiClient.Connect
         locationTimer.cancel();
         onStop();
     }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
+    }
+
+    // This is the object that receives interactions from clients.  See
+    // RemoteService for a more complete example.
+    private final IBinder mBinder = new LocalBinder();
 
     /** retrieves the context. */
     public static Context getContext() {
@@ -306,12 +329,6 @@ public class LocationServices extends Service implements GoogleApiClient.Connect
         super.onStartCommand(intent, flags, startId);
         Log.i(TAG, "service starting");
         return START_STICKY;
-    }
-
-    /** lightweight remote procedure call mechanism. */
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
     }
 
     /** Updates location on a timer. */

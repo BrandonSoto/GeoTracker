@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
@@ -37,16 +36,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import edu.uw.ProjectMayhem.R;
-import edu.uw.ProjectMayhem.model.User;
 
 /** RegistrationActivity generates the registration features of app. */
 public class RegistrationActivity extends ActionBarActivity {
-
-    /** Used to generate unique user ID. */
-    private static String uid = "1";
-
-    /** The newly registered user. */
-    private User mUser;
 
     /** Where user types in email. */
     private EditText mEmailText;
@@ -111,9 +103,6 @@ public class RegistrationActivity extends ActionBarActivity {
                     mAnswerText.requestFocus();
 
                 } else {
-
-                    mUser = new User(uid, mEmailText.getText().toString(), mPasswordText.getText().toString(),
-                            mSecuritySpinner.getSelectedItem().toString(), mAnswerText.getText().toString());
 
                     // Display agreement, and only register to server if agreed, else exit
 
@@ -229,20 +218,6 @@ public class RegistrationActivity extends ActionBarActivity {
 
     private boolean isAnswerValid(String answer) {
         return answer.length() > 0;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-        outState.putSerializable("user", mUser);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        mUser = (User) savedInstanceState.getSerializable("user");
     }
 
     /** {@inheritDoc} */

@@ -81,19 +81,4 @@
         android:textSize="20sp"
         android:textStyle="bold"/>
 
-    <Button
-        android:id="@+id/dump_data_button"
-        style="?android:textAppearanceSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/trajectory_button"
-        android:layout_marginTop="25dp"
-        android:background="#ff000000"
-        android:text="@string/dump_data"
-        android:textColor="#ff97d992"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
-
-
 </RelativeLayout>

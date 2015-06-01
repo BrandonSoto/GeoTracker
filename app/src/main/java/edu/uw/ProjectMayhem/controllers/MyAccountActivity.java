@@ -69,9 +69,14 @@ public class MyAccountActivity extends ActionBarActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_account);
 
-        // Start the service
-        locationServiceIntent = new Intent(this, LocationServices.class);
-        startService(locationServiceIntent);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isTracking = prefs.getBoolean("tracking", true);
+
+        if (isTracking) {
+            // Start the service
+            locationServiceIntent = new Intent(this, LocationServices.class);
+            startService(locationServiceIntent);
+        }
 
         ComponentName receiver = new ComponentName(this, LocationBroadcastReceiver.class);
         PackageManager pm = this.getPackageManager();
@@ -80,7 +85,6 @@ public class MyAccountActivity extends ActionBarActivity implements View.OnClick
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         final String uid = prefs.getString("uid", "");
         Log.d("MyAccountActivity", "User id is:" + uid);
 
@@ -98,55 +102,6 @@ public class MyAccountActivity extends ActionBarActivity implements View.OnClick
             @Override
             public void onClick(View view) {
                 myTrajectory(view);
-            }
-        });
-
-        Button mDumpDataButton = (Button) findViewById(R.id.dump_data_button);
-        mDumpDataButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Dump data to Menaka's server
-                MovementDBHandler myData = new MovementDBHandler(MyAccountActivity.this);
-                List<MovementData> allData = myData.getAllMovement();
-                for (MovementData d : allData) {
-                    Log.d("MyAccountActivity", "Uploading data with timestamp: " + d.getTimeStamp());
-                    DataUploadTask task = new DataUploadTask(d.getLatitude(),
-                            d.getLongitude(),
-                            d.getSpeed(),
-                            d.getHeading(),
-                            uid,
-                            d.getTimeStamp());
-                    task.execute();
-                    String response = "";
-
-                    try {
-                        response = task.get();
-                    } catch (Exception e) {
-                        System.err.println("Something bad happened while parsing JSON");
-                    }
-
-                    System.out.println("response: " + response);
-
-                    if (response != null) {
-                        try {
-
-                            JSONObject o = new JSONObject(response);
-
-                            if (o.get("result").equals("success")) {
-
-                                Log.d("MyAccountActivity", "Data uploaded successfully.");
-
-                            } else {
-
-                                Log.d("MyAccountActivity", "Error uploading data.");
-
-                            }
-                        } catch (JSONException e) {
-                            System.out.println("JSON Exception " + e);
-                        }
-                    }
-                }
-                myData.deleteAllMovement();
             }
         });
 
@@ -245,71 +200,6 @@ public class MyAccountActivity extends ActionBarActivity implements View.OnClick
             mStartDateDialog.show();
         } else if (v == mEndButton) {
             mEndDateDialog.show();
-        }
-    }
-
-    /**
-     * Represents an asynchronous task to sumbit a location update
-     */
-    public class DataUploadTask extends AsyncTask<Void, Void, String> {
-
-        private String webURL = "http://450.atwebpages.com/logAdd.php";
-        private double latitude;
-        private double longitude;
-        private double speed;
-        private double heading;
-        private String userid;
-        private long timestamp;
-
-        public DataUploadTask(double lat, double lon, double speed, double heading, String uid, long time) {
-            super();
-            latitude = lat;
-            longitude = lon;
-            this.speed = speed;
-            this.heading = heading;
-            userid = uid;
-            timestamp = time;
-        }
-
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected String doInBackground(Void... params) {
-
-            String result = "";
-
-            HttpURLConnection connection;
-
-            URL url;
-            String parameters = ("?lat=" + latitude
-                    + "&lon=" + longitude
-                    + "&speed=" + speed
-                    + "&heading=" + heading
-                    + "&source=" + userid
-                    + "&timestamp=" + timestamp);
-            try {
-                Log.d("MyAccountActivity", "Sending url: " + webURL + parameters);
-                url = new URL(webURL + parameters);
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setDoOutput(true);
-                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                connection.setRequestMethod("GET");
-
-                InputStreamReader isr = new InputStreamReader(connection.getInputStream());
-                BufferedReader reader = new BufferedReader(isr);
-
-                result = reader.readLine();
-
-                isr.close();
-                reader.close();
-
-            } catch (IOException e) {
-                System.err.println("Something bad happened while sending HTTP GET");
-            }
-
-            return result;
         }
     }
 }
