@@ -78,7 +78,7 @@ public class RegistrationActivity extends ActionBarActivity {
              * Attempts to register the user and then switch to login screen.
              */
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
 
                 final View theView = v;
 
@@ -176,7 +176,8 @@ public class RegistrationActivity extends ActionBarActivity {
                             })
                             .setNegativeButton("Decline", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface agreement, int which) {
-                                    System.exit(0);
+                                   // System.exit(0);
+                                    login(v);
                                 }
                             })
                             .show();
