@@ -10,8 +10,10 @@ package edu.uw.ProjectMayhem.controllers;
 import android.app.DatePickerDialog;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -68,6 +70,8 @@ public class MyAccountActivity extends ActionBarActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_account);
+
+        registerReceiver(new NetworkBroadcastReceiver(), new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isTracking = prefs.getBoolean("tracking", true);
