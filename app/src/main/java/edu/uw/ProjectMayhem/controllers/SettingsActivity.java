@@ -185,6 +185,9 @@ public class SettingsActivity extends ActionBarActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 }
+
+                stopService(locationServiceIntent);
+                startService(locationServiceIntent);
             }
         });
     }
