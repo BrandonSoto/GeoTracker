@@ -108,16 +108,6 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         boolean textFound = solo.searchText("Reset Password");
         assertTrue("Reset password button failed", textFound);
 
-        /**
-        solo.enterText(0, "loralyn@uw.edu");
-        solo.clickOnButton("Reset Password");
-        //for a pause
-        for (i = 0; i < 10000; i++) {
-
-        }
-        boolean textFound = solo.searchText("An email with instructions");
-        assertTrue("Reset password failed", textFound);
-         */
     }
 
 }
