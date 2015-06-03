@@ -10,20 +10,23 @@ package edu.uw.ProjectMayhem.controllers;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.robotium.solo.Solo;
-
+/** Test class for ResetActivity functionality. */
 public class ResetActivityTest extends ActivityInstrumentationTestCase2<ResetActivity> {
     private Solo solo;
 
+    /** constructs the ResetActivity. */
     public ResetActivityTest() {
         super(ResetActivity.class);
     }
 
+    /** sets up conditions prior to each test. */
     @Override
     public void setUp() throws Exception {
         super.setUp();
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
+    /** resets conditions following each test. */
     @Override
     public void tearDown() throws Exception {
         //tearDown() is run after a test case has finished.
@@ -31,13 +34,11 @@ public class ResetActivityTest extends ActivityInstrumentationTestCase2<ResetAct
         solo.finishOpenedActivities();
     }
 
-    public void testARequiredFields() {
+    /** Tests non-email of the ResetActivity. */
+    public void testANonEmail() {
         int i;
         solo.unlockScreen();
 
-        solo.clickOnButton("Login");
-        boolean textFound = solo.searchText("This field is required");
-        assertTrue("Required fields validation failed", textFound);
 
         //for a pause
         for (i = 0; i < 10000; i++) {
@@ -45,77 +46,46 @@ public class ResetActivityTest extends ActivityInstrumentationTestCase2<ResetAct
         }
 
         solo.enterText(0, "t");
-        solo.clickOnButton("Login");
-        textFound = solo.searchText("This email address is invalid");
-        assertTrue("Login email address failed", textFound);
+        solo.clickOnButton("Reset Password");
+        boolean textFound = solo.searchText("Please enter a valid email.");
+        assertTrue("", textFound);
 
         //for a pause
         for (i = 0; i < 10000; i++) {
 
         }
 
-        /**
-         solo.enterText(0, "loralyn@uw.edu");
+        solo.enterText(0, "est@dummy.com");
+        solo.clickOnButton("Reset Password");
+        textFound = solo.searchText("Email not found.");
+        assertTrue("", textFound);
+
+        //for a pause
+        for (i = 0; i < 10000; i++) {
+
+        }
+    }
+
+    /** Tests registered email of the ResetActivity. */
+    public void testBEmail() {
+        int i;
+        solo.unlockScreen();
+
+
+        //for a pause
+        for (i = 0; i < 10000; i++) {
+
+        }
+
+        solo.enterText(0, "loralyn@uw.edu");
          solo.clickOnButton("Reset Password");
+
          //for a pause
          for (i = 0; i < 10000; i++) {
 
          }
          boolean textFound = solo.searchText("An email with instructions");
          assertTrue("Reset password failed", textFound);
-         */
-
-        solo.enterText(0, "est@dummy.com");
-        solo.enterText(1, "p");
-        solo.clickOnButton("Login");
-        textFound = solo.searchText("Password must exceed 5 characters");
-        assertTrue("Login password failed", textFound);
-
-        //for a pause
-        for (i = 0; i < 10000; i++) {
-
-        }
-    }
-
-    public void testBOrientation() {
-        int i;
-        solo.clickOnButton("Register");
-        solo.enterText(0, "test@dummy.com");
-        solo.enterText(1, "password");
-        solo.enterText(2, "password");
-        solo.enterText(3, "security answer");
-
-        solo.setActivityOrientation(Solo.LANDSCAPE);
-        boolean textFound = solo.searchText("test@dummy.com");
-        assertTrue("Orientation change failed", textFound);
-
-        //for a pause
-        for (i = 0; i < 10000; i++) {
-
-        }
-
-        solo.setActivityOrientation(Solo.PORTRAIT);
-        textFound = solo.searchText("test@dummy.com");
-        assertTrue("Orientation change failed", textFound);
-
-        //for a pause
-        for (i = 0; i < 10000; i++) {
-
-        }
-    }
-
-    public void testCLogin() {
-        int i;
-        solo.enterText(0, "loralyn@uw.edu");
-        solo.enterText(1, "password");
-        solo.clickOnButton("Login");
-        boolean textFound = solo.searchText("loralyn@uw.edu has signed in!");
-        assertTrue("Login failed", textFound);
-
-        //for a pause
-        for (i = 0; i < 10000; i++) {
-
-        }
     }
 
 }
