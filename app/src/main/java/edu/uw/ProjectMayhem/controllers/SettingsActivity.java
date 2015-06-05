@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2015. Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto.
+ */
+
+/**
+ * Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto.
+ */
 package edu.uw.ProjectMayhem.controllers;
 
 import android.content.Intent;
@@ -21,7 +28,7 @@ import edu.uw.ProjectMayhem.R;
 import edu.uw.ProjectMayhem.model.LocationServices;
 import edu.uw.ProjectMayhem.model.UploadService;
 
-
+/** SettingsActivity handles user setting choices. */
 public class SettingsActivity extends ActionBarActivity {
 
     private SharedPreferences prefs;
@@ -38,6 +45,7 @@ public class SettingsActivity extends ActionBarActivity {
     // Shared preferences names for each slider
     private static final String LOCATION_SLIDER = "location_slider";
 
+    /** onCreate() instantiates SettingsActivity. */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +101,7 @@ public class SettingsActivity extends ActionBarActivity {
         });
     }
 
+    /**setupSlider creates the slider for SettingsActivity. */
     private void setupSlider(final int lessOffset, final int greaterOffset,
                              final TextView underText, SeekBar slider,
                              final int defaultInterval, final String prefsName) {
@@ -192,6 +201,7 @@ public class SettingsActivity extends ActionBarActivity {
         });
     }
 
+    /**Adds items to the action bar. */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -199,6 +209,7 @@ public class SettingsActivity extends ActionBarActivity {
         return true;
     }
 
+    /**Listener for action bar */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2015. Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto.
+ */
+
+/**
+ * Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto.
+ */
 package edu.uw.ProjectMayhem.model;
 
 import android.os.AsyncTask;
@@ -10,18 +17,25 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Represents an asynchronous task to sumbit a location update
+ * Represents an asynchronous task to submit a location update
  */
 public class DataUploadTask extends AsyncTask<Void, Void, String> {
-
+    /** webURL string. */
     private String webURL = "http://450.atwebpages.com/logAdd.php";
+    /** latitude double. */
     private double latitude;
+    /**longitude double. */
     private double longitude;
+    /** speed double. */
     private double speed;
+    /** heading double. */
     private double heading;
+    /**userid string. */
     private String userid;
+    /**timestamp long. */
     private long timestamp;
 
+    /**DataUploadTask constructor. */
     public DataUploadTask(double lat, double lon, double speed, double heading, String uid, long time) {
         super();
         latitude = lat;

@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2015. Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto.
+ */
+
+/**
+ * Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto.
+ */
 package edu.uw.ProjectMayhem.controllers;
 
 import android.app.NotificationManager;
@@ -11,18 +18,20 @@ import android.support.v4.app.NotificationCompat;
 import edu.uw.ProjectMayhem.R;
 import edu.uw.ProjectMayhem.model.UploadService;
 
-/**
- * Created by Brian on 6/1/2015.
+/**NetworkBroadcastReceiver deals with network connectivity and sampling rates when a network is
+ * available.
  */
 public class NetworkBroadcastReceiver extends BroadcastReceiver {
 
+    /**Notification Manager */
     private NotificationManager mManager;
+    /**NotificationCompat.Builder */
     private NotificationCompat.Builder mNotification;
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
-//        If the user hasn’t selected a sampling rate and there is network connectivity, sample every
+//        If the user hasnï¿½t selected a sampling rate and there is network connectivity, sample every
 //        minute. If the network is unavailable then wait for the message that the network is
 //        available. Restart sampling every minute once the state is available.
 

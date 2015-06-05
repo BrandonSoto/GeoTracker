@@ -1,3 +1,4 @@
+<!--   ~ Copyright (c) 2015. Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto. -->
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"

@@ -112,6 +112,7 @@ public class MyAccountActivity extends ActionBarActivity implements View.OnClick
         setupDateDialogs();
     }
 
+    /** creates Date dialogs for MyAccountActivity. */
     private void setupDateDialogs() {
         final Calendar initial_calendar = Calendar.getInstance();
         final String start = getString(R.string.start_date);
@@ -198,6 +199,7 @@ public class MyAccountActivity extends ActionBarActivity implements View.OnClick
         finish();
     }
 
+    /** onClick() selects the user's choice of calendar dialogs. */
     @Override
     public void onClick(View v) {
         if (v == mStartButton) {

@@ -118,6 +118,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         onReceive(this,this.getIntent());
     }
 
+    /** onReceive() creates an AlertDialog.builder for LoginActivity. */
     public void onReceive(Context context, Intent intent) {
 
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);

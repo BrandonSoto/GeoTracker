@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2015. Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto.
+ */
+
+/**
+ * Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto.
+ */
 package edu.uw.ProjectMayhem.model;
 
 import android.app.Service;
@@ -24,15 +31,15 @@ import java.util.TimerTask;
 import edu.uw.ProjectMayhem.data.MovementDBHandler;
 import edu.uw.ProjectMayhem.data.MovementData;
 
-/**
- * Created by Jacob on 6/1/15.
- */
+/**UploadService uploads movement data to web services. */
 public class UploadService extends Service {
 
+    /**upload timer. */
     private Timer uploadTimer;
-
+    /**upload interval. */
     private static final int UPLOAD_INTERVAL = 3600;
 
+    /**onCreate() instantiates UploadService. */
     @Override
     public void onCreate() {
 
@@ -45,15 +52,18 @@ public class UploadService extends Service {
 
     }
 
+    /**onBind returns null. */
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
+    /**getContext() retrieves application context. */
     public Context getContext() {
         return getApplicationContext();
     }
 
+    /**manualUpload() uploads data to web services when user overrides the timer. */
     public static void manualUpload(Context context) {
 
         MovementDBHandler dbHandler = new MovementDBHandler(context);
@@ -62,6 +72,7 @@ public class UploadService extends Service {
 
     }
 
+    /**uploadData() uploads movement data to the web services. */
     private static void uploadData(MovementDBHandler locationDatabase, Context context) {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

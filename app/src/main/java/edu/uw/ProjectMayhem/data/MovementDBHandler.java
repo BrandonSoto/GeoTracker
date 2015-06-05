@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2015. Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto.
+ */
+
+/**
+ * Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto.
+ */
 package edu.uw.ProjectMayhem.data;
 
 import android.content.ContentValues;
@@ -9,28 +16,34 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
- * Copyright (c) 2015. Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto.
- */
+/**MovementDBHandler is a database handler for the location tracking info. */
 public class MovementDBHandler extends SQLiteOpenHelper {
 
-
+    /** database version number. */
     private static int DATABASE_VERSION = 1;
-
+    /** database name. */
     private static final String DATABASE_NAME = "PeopleTracker";
+    /**Movement string. */
     private static final String MOVEMENT = "movement";
-
+    /**Latitude string. */
     private static final String LATITUDE = "latitude";
+    /**Longitude string. */
     private static final String LONGITUDE = "longitude";
+    /**Speed string. */
     private static final String SPEED = "speed";
+    /**Heading string. */
     private static final String HEADING = "heading";
+    /**User_ID string. */
     private static final String USER_ID = "user_id";
+    /**Timestamp string. */
     private static final String TIMESTAMP = "timestamp";
 
+    /**MovementDBHandler constructor. */
     public MovementDBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /**addMovement() add new location data to database. */
     public void addMovement(MovementData aMove) {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -67,6 +80,7 @@ public class MovementDBHandler extends SQLiteOpenHelper {
 //        return move;
 //    }
 
+    /**Retieves all movement data. */
     public List<MovementData> getAllMovement() {
 
         List<MovementData> movementList = new ArrayList<MovementData>();
@@ -97,6 +111,7 @@ public class MovementDBHandler extends SQLiteOpenHelper {
         return movementList;
     }
 
+    /**retrieves Movement count. */
     public int getMovementCount() {
 
         String countQuery = "SELECT  * FROM " + MOVEMENT;
@@ -128,6 +143,7 @@ public class MovementDBHandler extends SQLiteOpenHelper {
 //                new String[] { String.valueOf(update.getSourceID())});
 //    }
 //
+    /**deletes movement data from database. */
     public void deleteAllMovement() {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -137,6 +153,7 @@ public class MovementDBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    /**onCreate() instantiates movement table. */
     @Override
     public void onCreate(SQLiteDatabase db) {
 
@@ -147,6 +164,7 @@ public class MovementDBHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_MOVEMENT_TABLE);
     }
 
+    /**onUpgrade() upgrades table. */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldDB, int newDB) {
 

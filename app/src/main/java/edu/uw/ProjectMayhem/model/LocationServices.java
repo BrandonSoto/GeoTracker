@@ -172,6 +172,7 @@ public class LocationServices extends Service implements GoogleApiClient.Connect
         onStop();
     }
 
+    /**onBind() instantiates a binder object. */
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
