@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
+import edu.uw.ProjectMayhem.R;
 import edu.uw.ProjectMayhem.model.UploadService;
 
 /**
@@ -16,36 +16,41 @@ import edu.uw.ProjectMayhem.model.UploadService;
  */
 public class NetworkBroadcastReceiver extends BroadcastReceiver {
 
+    private NotificationManager mManager;
+    private NotificationCompat.Builder mNotification;
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        //////// debugging stuff //////////////////////////////////////////////////////////////////
-        Log.d("*********", "NetworkBroadcastReceiver onReceive called!");
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(context)
-                        .setSmallIcon(android.R.drawable.ic_menu_mylocation)
-                        .setContentTitle("GeoTracker")
-                        .setContentText("--Service started");
-        NotificationManager mNotificationManager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(2, mBuilder.build());
-        ///////////////////////////////////////////////////////////////////////////////////////////
+//        If the user hasn’t selected a sampling rate and there is network connectivity, sample every
+//        minute. If the network is unavailable then wait for the message that the network is
+//        available. Restart sampling every minute once the state is available.
 
-        Intent upload = new Intent(context, UploadService.class);
+        mManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotification = new NotificationCompat.Builder(context)
+                .setContentTitle(context.getString(R.string.app_name))
+                .setSmallIcon(android.R.drawable.ic_menu_mylocation);
 
-        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        final Intent upload = new Intent(context, UploadService.class);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        final ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnected();
+        final NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        final boolean isConnected = activeNetwork != null && activeNetwork.isConnected();
 
         if (isConnected) {
+            /*************************************************
+             * set sampling to 1 minute if using default rate
+             *************************************************/
             context.startService(upload);
+            mNotification.setContentText("Network Connected! - Upload On");
         } else {
             context.stopService(upload);
-
+            mNotification.setContentText("Network Disconnected! - Upload Off");
         }
+
+        mManager.notify(2, mNotification.build());
     }
 }
