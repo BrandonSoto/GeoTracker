@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--   ~ Copyright (c) 2015. Project Mayhem: Jacob Hohisel, Loralyn Solomon, Brian Plocki, Brandon Soto. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="edu.uw.ProjectMayhem" >
+    package="edu.uw.ProjectMayhem" >
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -85,8 +85,9 @@
         </receiver>
 
         <receiver android:name=".controllers.NetworkBroadcastReceiver"
-                  android:enabled="true"
-                  android:exported="true">
+            android:enabled="true"
+            android:exported="true">
+
         </receiver>
 
         <meta-data

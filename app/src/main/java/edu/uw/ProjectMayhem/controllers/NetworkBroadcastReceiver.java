@@ -15,8 +15,22 @@ import edu.uw.ProjectMayhem.model.UploadService;
  * Created by Brian on 6/1/2015.
  */
 public class NetworkBroadcastReceiver extends BroadcastReceiver {
+
+
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        //////// debugging stuff //////////////////////////////////////////////////////////////////
+        Log.d("*********", "NetworkBroadcastReceiver onReceive called!");
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(android.R.drawable.ic_menu_mylocation)
+                        .setContentTitle("GeoTracker")
+                        .setContentText("--Service started");
+        NotificationManager mNotificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(2, mBuilder.build());
+        ///////////////////////////////////////////////////////////////////////////////////////////
 
         Intent upload = new Intent(context, UploadService.class);
 
@@ -29,30 +43,8 @@ public class NetworkBroadcastReceiver extends BroadcastReceiver {
 
         if (isConnected) {
             context.startService(upload);
-            //////// debugging stuff //////////////////////////////////////////////////////////////////
-            Log.d("*********", "NetworkBroadcastReceiver onReceive called!");
-            NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(context)
-                            .setSmallIcon(android.R.drawable.ic_menu_mylocation)
-                            .setContentTitle("GeoTracker")
-                            .setContentText("--Network Service connected!");
-            NotificationManager mNotificationManager =
-                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.notify(2, mBuilder.build());
-            ///////////////////////////////////////////////////////////////////////////////////////////
         } else {
             context.stopService(upload);
-            //////// debugging stuff //////////////////////////////////////////////////////////////////
-            Log.d("*********", "NetworkBroadcastReceiver onReceive called!");
-            NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(context)
-                            .setSmallIcon(android.R.drawable.ic_menu_mylocation)
-                            .setContentTitle("GeoTracker")
-                            .setContentText("--Network Service not connected!");
-            NotificationManager mNotificationManager =
-                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.notify(3, mBuilder.build());
-            ///////////////////////////////////////////////////////////////////////////////////////////
 
         }
     }
